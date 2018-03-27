@@ -38,10 +38,11 @@ function refreshChart(data) {
 
 $(document).ready(function() {
     $('#chart-load-button').click(function() {
-        var date = $('#chart-text-input').val();
+        var dateFrom = $('#date-from').val();
+        var dateTo = $('#date-to').val();
 
         $.ajax({
-            url: 'https://api.carbonintensity.org.uk/intensity/date/' + date,
+            url: 'https://api.carbonintensity.org.uk/intensity/' + dateFrom + '/' + dateTo,
             method: 'get',
             headers: {
                 'Accept':'application/json'
