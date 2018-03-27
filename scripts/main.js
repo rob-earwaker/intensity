@@ -20,14 +20,14 @@ function refreshChart(data) {
         .range([height, 0])
         .domain([0, 1.05 * d3.max(data, function(d) { return d.intensity.actual; })]);
 
-    g.append('g')
+    var xAxis = g.append('g')
         .call(d3.axisBottom(xScale))
         .attr('transform', 'translate(0,' + height + ')')
 
-    g.append('g')
+    var yAxis = g.append('g')
         .call(d3.axisLeft(yScale))
 
-    g.append('path')
+    var dataLine = g.append('path')
         .datum(data)
         .attr('d', d3.line()
             .x(function(d) { return xScale(d3.isoParse(d.from)); })
@@ -43,7 +43,7 @@ function refreshChart(data) {
         .attr('y2', height)
         .attr('stroke', 'black');
 
-    g.append('rect')
+    var chartArea = g.append('rect')
         .attr('width', width)
         .attr('height', height)
         .attr('fill', 'none')
