@@ -43,6 +43,8 @@ function refreshChart(data) {
         .attr('y2', height)
         .attr('stroke', 'black');
 
+    var tooltipText = tooltipGroup.append('text');
+
     var chartArea = g.append('rect')
         .attr('width', width)
         .attr('height', height)
@@ -52,7 +54,13 @@ function refreshChart(data) {
         .on('mouseout', function() { tooltipGroup.attr('display', 'none'); })
         .on('mousemove', function() {
             var xPixel = d3.mouse(this)[0];
-            tooltipLine.attr('transform', 'translate(' + xPixel + ',0)')
+            var xValue = xScale.invert(xPixel);
+            tooltipLine.attr('transform', 'translate(' + xPixel + ',0)');
+            tooltipText
+                .attr('transform', 'translate(' + xPixel + ',' + height + ')')
+                .attr('dx', '0.50em')
+                .attr('dy', '-0.50em')
+                .text(xValue);
         });
 };
 
