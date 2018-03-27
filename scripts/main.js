@@ -18,7 +18,7 @@ function refreshChart(data) {
 
     var yScale = d3.scaleLinear()
         .range([height, 0])
-        .domain(d3.extent(data, function(d) { return d.intensity.actual; }));
+        .domain([0, 1.05 * d3.max(data, function(d) { return d.intensity.actual; })]);
 
     g.append('g')
         .call(d3.axisBottom(xScale))
