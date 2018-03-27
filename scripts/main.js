@@ -50,6 +50,7 @@ function refreshChart(data) {
         .attr('fill', 'none')
         .attr('pointer-events', 'all')
         .on('mouseover', function() { tooltipGroup.attr('display', null); })
+        .on('mouseout', function() { tooltipGroup.attr('display', 'none'); });
 };
 
 $(document).ready(function() {
