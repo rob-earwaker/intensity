@@ -3,22 +3,31 @@ function refreshChart(data) {
 
     svg.selectAll('*').remove();
 
+    var margin = {top: 10, right: 10, bottom: 30, left: 30};
+    var width = svg.attr('width') - margin.left - margin.left;
+    var height = svg.attr('height') - margin.top - margin.bottom;
+
+    var g = svg.append('g')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
+
     var xScale = d3.scaleTime()
-        .range([0, svg.attr('width')])
+        .range([0, width])
         .domain(d3.extent(data, function(d) { return d3.isoParse(d.from); }));
 
     var yScale = d3.scaleLinear()
-        .range([svg.attr('height'), 0])
+        .range([height, 0])
         .domain(d3.extent(data, function(d) { return d.intensity.actual; }));
 
-    svg.append('g')
+    g.append('g')
         .call(d3.axisBottom(xScale))
+        .attr('transform', 'translate(0,' + height + ')')
 
-    svg.append('g')
-        .call(d3.axisRight(yScale))
+    g.append('g')
+        .call(d3.axisLeft(yScale))
 
-    svg.append('g')
-        .append('path')
+    g.append('path')
         .datum(data)
         .attr('d', d3.line()
             .x(function(d) { return xScale(d3.isoParse(d.from)); })
