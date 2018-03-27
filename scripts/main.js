@@ -34,6 +34,22 @@ function refreshChart(data) {
             .y(function(d) { return yScale(d.intensity.actual); }))
         .attr('fill', 'none')
         .attr('stroke', 'black');
+
+    var tooltipGroup = g.append('g')
+        .attr('display', 'none');
+
+    tooltipGroup.append('line')
+        .attr('y1', 0)
+        .attr('y2', height)
+        .attr('transform', 'translate(50,0)')
+        .attr('stroke', 'black');
+
+    g.append('rect')
+        .attr('width', width)
+        .attr('height', height)
+        .attr('fill', 'none')
+        .attr('pointer-events', 'all')
+        .on('mouseover', function() { tooltipGroup.attr('display', null); })
 };
 
 $(document).ready(function() {
