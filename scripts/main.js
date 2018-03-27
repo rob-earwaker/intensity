@@ -38,10 +38,9 @@ function refreshChart(data) {
     var tooltipGroup = g.append('g')
         .attr('display', 'none');
 
-    tooltipGroup.append('line')
+    var tooltipLine = tooltipGroup.append('line')
         .attr('y1', 0)
         .attr('y2', height)
-        .attr('transform', 'translate(50,0)')
         .attr('stroke', 'black');
 
     g.append('rect')
@@ -50,7 +49,11 @@ function refreshChart(data) {
         .attr('fill', 'none')
         .attr('pointer-events', 'all')
         .on('mouseover', function() { tooltipGroup.attr('display', null); })
-        .on('mouseout', function() { tooltipGroup.attr('display', 'none'); });
+        .on('mouseout', function() { tooltipGroup.attr('display', 'none'); })
+        .on('mousemove', function() {
+            var xPixel = d3.mouse(this)[0];
+            tooltipLine.attr('transform', 'translate(' + xPixel + ',0)')
+        });
 };
 
 $(document).ready(function() {
