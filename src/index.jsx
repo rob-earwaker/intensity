@@ -75,13 +75,27 @@ class ChartArea extends React.Component {
 class Chart extends React.Component {
     constructor(props) {
         super(props);
-        this.state = { data: [] };
+        this.state = {
+            dateFrom: '2017-10-01',
+            dateTo: '2017-10-29',
+            data: []
+        };
         this.onLoad = this.onLoad.bind(this);
+        this.onDateFromChange = this.onDateFromChange.bind(this);
+        this.onDateToChange = this.onDateToChange.bind(this);
+    }
+
+    onDateFromChange(event) {
+        this.setState({ dateFrom: event.target.value });
+    }
+
+    onDateToChange(event) {
+        this.setState({ dateTo: event.target.value });
     }
 
     onLoad() {
-        var dateFrom = d3.select('#date-from').attr('value');
-        var dateTo = d3.select('#date-to').attr('value');
+        var dateFrom = this.state.dateFrom;
+        var dateTo = this.state.dateTo;
         var url = 'https://api.carbonintensity.org.uk/intensity/' + dateFrom + '/' + dateTo;
         d3.json(url).then(json => this.setState({ data: json.data }));
     }
@@ -91,8 +105,8 @@ class Chart extends React.Component {
             <React.Fragment>
                 <h1>Chart #1</h1>
                 <div>
-                    <input id="date-from" type="text" defaultValue="2017-10-01" />
-                    <input id="date-to" type="text" defaultValue="2017-10-29" />
+                    <input id="date-from" type="text" value={this.state.dateFrom} onChange={this.onDateFromChange} />
+                    <input id="date-to" type="text" value={this.state.dateTo} onChange={this.onDateToChange} />
                     <button id="chart-load-button" onClick={this.onLoad}>Load</button>
                 </div>
                 <ChartArea width={960} height={480} data={this.state.data} />
