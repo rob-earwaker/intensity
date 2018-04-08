@@ -1,0 +1,13 @@
+{
+  "name": "intensity",
+  "version": "1.0.0",
+  "main": "index.js",
+  "repository": "https://github.com/rob-earwaker/intensity.git",
+  "author": "Rob Earwaker <rob-earwaker@users.noreply.github.com>",
+  "license": "MIT",
+  "dependencies": {
+    "d3": "^5.0.0",
+    "react": "^16.3.1",
+    "react-dom": "^16.3.1"
+  }
+}
