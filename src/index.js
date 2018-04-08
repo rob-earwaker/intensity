@@ -66,7 +66,7 @@ function refreshChart(data) {
         });
 };
 
-export function onClick() {
+function onClick() {
     var dateFrom = $('#date-from').val();
     var dateTo = $('#date-to').val();
     var url = 'https://api.carbonintensity.org.uk/intensity/' + dateFrom + '/' + dateTo;
