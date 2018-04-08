@@ -96,7 +96,7 @@ class Chart extends React.Component {
     onLoad() {
         var dateFrom = this.state.dateFrom;
         var dateTo = this.state.dateTo;
-        var url = 'https://api.carbonintensity.org.uk/intensity/' + dateFrom + '/' + dateTo;
+        var url = `https://api.carbonintensity.org.uk/intensity/${dateFrom}/${dateTo}`;
         d3.json(url).then(json => this.setState({ data: json.data }));
     }
 
