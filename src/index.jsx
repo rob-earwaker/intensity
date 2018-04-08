@@ -77,15 +77,20 @@ function onClick() {
     });
 }
 
-ReactDOM.render(
-    <React.Fragment>
-        <h1>Chart #1</h1>
-        <div>
-            <input id="date-from" type="text" value="2017-10-01" />
-            <input id="date-to" type="text" value="2017-10-29" />
-            <button id="chart-load-button" onClick={onClick}>Load</button>
-        </div>
-        <svg width="960" height="480" />
-    </React.Fragment>,
-    document.getElementById('root')
-);
+class Chart extends React.Component {
+    render() {
+        return (
+            <React.Fragment>
+                <h1>Chart #1</h1>
+                <div>
+                    <input id="date-from" type="text" defaultValue="2017-10-01" />
+                    <input id="date-to" type="text" defaultValue="2017-10-29" />
+                    <button id="chart-load-button" onClick={onClick}>Load</button>
+                </div>
+                <svg width="960" height="480" />
+            </React.Fragment>
+        )
+    }
+}
+
+ReactDOM.render(<Chart />, document.getElementById('root'));
