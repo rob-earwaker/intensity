@@ -4,35 +4,35 @@ import ReactDOM from 'react-dom';
 
 class ChartArea extends React.Component {
     render() {
-        var svg = d3.select('svg');
+        const svg = d3.select('svg');
 
         svg.selectAll('*').remove();
 
-        var margin = { top: 10, right: 10, bottom: 30, left: 30 };
-        var width = this.props.width - margin.left - margin.left;
-        var height = this.props.height - margin.top - margin.bottom;
+        const margin = { top: 10, right: 10, bottom: 30, left: 30 };
+        const width = this.props.width - margin.left - margin.left;
+        const height = this.props.height - margin.top - margin.bottom;
 
-        var g = svg.append('g')
+        const g = svg.append('g')
             .attr('width', width)
             .attr('height', height)
             .attr('transform', 'translate(' + margin.left + ',' + margin.top + ')')
 
-        var xScale = d3.scaleTime()
+        const xScale = d3.scaleTime()
             .range([0, width])
             .domain(d3.extent(this.props.data, function (d) { return d3.isoParse(d.from); }));
 
-        var yScale = d3.scaleLinear()
+        const yScale = d3.scaleLinear()
             .range([height, 0])
             .domain([0, 1.05 * d3.max(this.props.data, function (d) { return d.intensity.actual; })]);
 
-        var xAxis = g.append('g')
+        const xAxis = g.append('g')
             .call(d3.axisBottom(xScale))
             .attr('transform', 'translate(0,' + height + ')')
 
-        var yAxis = g.append('g')
+        const yAxis = g.append('g')
             .call(d3.axisLeft(yScale))
 
-        var dataLine = g.append('path')
+        const dataLine = g.append('path')
             .datum(this.props.data)
             .attr('d', d3.line()
                 .x(function (d) { return xScale(d3.isoParse(d.from)); })
@@ -40,17 +40,17 @@ class ChartArea extends React.Component {
             .attr('fill', 'none')
             .attr('stroke', 'black');
 
-        var tooltipGroup = g.append('g')
+        const tooltipGroup = g.append('g')
             .attr('display', 'none');
 
-        var tooltipLine = tooltipGroup.append('line')
+        const tooltipLine = tooltipGroup.append('line')
             .attr('y1', 0)
             .attr('y2', height)
             .attr('stroke', 'black');
 
-        var tooltipText = tooltipGroup.append('text');
+        const tooltipText = tooltipGroup.append('text');
 
-        var chartArea = g.append('rect')
+        const chartArea = g.append('rect')
             .attr('width', width)
             .attr('height', height)
             .attr('fill', 'none')
@@ -58,8 +58,8 @@ class ChartArea extends React.Component {
             .on('mouseover', function () { tooltipGroup.attr('display', null); })
             .on('mouseout', function () { tooltipGroup.attr('display', 'none'); })
             .on('mousemove', function () {
-                var xPixel = d3.mouse(this)[0];
-                var xValue = xScale.invert(xPixel);
+                const xPixel = d3.mouse(this)[0];
+                const xValue = xScale.invert(xPixel);
                 tooltipLine.attr('transform', 'translate(' + xPixel + ',0)');
                 tooltipText
                     .attr('transform', 'translate(' + xPixel + ',' + height + ')')
@@ -94,9 +94,9 @@ class Chart extends React.Component {
     }
 
     onLoad() {
-        var dateFrom = this.state.dateFrom;
-        var dateTo = this.state.dateTo;
-        var url = `https://api.carbonintensity.org.uk/intensity/${dateFrom}/${dateTo}`;
+        const dateFrom = this.state.dateFrom;
+        const dateTo = this.state.dateTo;
+        const url = `https://api.carbonintensity.org.uk/intensity/${dateFrom}/${dateTo}`;
         d3.json(url).then(json => this.setState({ data: json.data }));
     }
 
