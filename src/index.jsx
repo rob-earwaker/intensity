@@ -1,4 +1,6 @@
 import * as d3 from 'd3';
+import React from 'react';
+import ReactDOM from 'react-dom';
 
 function refreshChart(data) {
     var svg = d3.select('svg');
@@ -67,10 +69,23 @@ function refreshChart(data) {
 };
 
 function onClick() {
-    var dateFrom = $('#date-from').val();
-    var dateTo = $('#date-to').val();
+    var dateFrom = d3.select('#date-from').attr('value');
+    var dateTo = d3.select('#date-to').attr('value');
     var url = 'https://api.carbonintensity.org.uk/intensity/' + dateFrom + '/' + dateTo;
-    d3.json(url, function (json) {
+    d3.json(url).then(function (json) {
         refreshChart(json.data);
     });
 }
+
+ReactDOM.render(
+    <React.Fragment>
+        <h1>Chart #1</h1>
+        <div>
+            <input id="date-from" type="text" value="2017-10-01" />
+            <input id="date-to" type="text" value="2017-10-29" />
+            <button id="chart-load-button" onClick={onClick}>Load</button>
+        </div>
+        <svg width="960" height="480" />
+    </React.Fragment>,
+    document.getElementById('root')
+);
