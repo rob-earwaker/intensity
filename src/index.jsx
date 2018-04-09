@@ -82,6 +82,17 @@ class Button extends React.Component {
     }
 }
 
+class DateInput extends React.Component {
+    render() {
+        return (
+            <input
+                type="text"
+                value={this.props.value}
+                onChange={this.props.onChange} />
+        )
+    }
+}
+
 class Chart extends React.Component {
     constructor(props) {
         super(props);
@@ -115,8 +126,8 @@ class Chart extends React.Component {
             <React.Fragment>
                 <h1>Chart #1</h1>
                 <div>
-                    <input id="date-from" type="text" value={this.state.dateFrom} onChange={this.onDateFromChange} />
-                    <input id="date-to" type="text" value={this.state.dateTo} onChange={this.onDateToChange} />
+                    <DateInput value={this.state.dateFrom} onChange={this.onDateFromChange} />
+                    <DateInput value={this.state.dateTo} onChange={this.onDateToChange} />
                     <Button onClick={this.onLoad} content='Load' />
                 </div>
                 <ChartArea width={960} height={480} data={this.state.data} />
