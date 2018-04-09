@@ -86,7 +86,7 @@ class DateInput extends React.Component {
     render() {
         return (
             <input
-                type="text"
+                type="date"
                 value={this.props.value}
                 onChange={this.props.onChange} />
         )
