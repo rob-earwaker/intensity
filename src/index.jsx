@@ -72,6 +72,16 @@ class ChartArea extends React.Component {
     }
 }
 
+class Button extends React.Component {
+    render() {
+        return (
+            <button type='button' onClick={this.props.onClick}>
+                {this.props.content}
+            </button>
+        )
+    }
+}
+
 class Chart extends React.Component {
     constructor(props) {
         super(props);
@@ -107,7 +117,7 @@ class Chart extends React.Component {
                 <div>
                     <input id="date-from" type="text" value={this.state.dateFrom} onChange={this.onDateFromChange} />
                     <input id="date-to" type="text" value={this.state.dateTo} onChange={this.onDateToChange} />
-                    <button id="chart-load-button" onClick={this.onLoad}>Load</button>
+                    <Button onClick={this.onLoad} content='Load' />
                 </div>
                 <ChartArea width={960} height={480} data={this.state.data} />
             </React.Fragment>
