@@ -69,7 +69,8 @@ class ChartArea extends React.Component {
                     .text(xValue);
             });
 
-        return <svg width={this.props.width} height={this.props.height} />
+        return <svg width={this.props.width} height={this.props.height}
+            visibility={this.props.visible ? null : 'hidden'} />
     }
 }
 
@@ -131,7 +132,7 @@ class Chart extends React.Component {
                         {this.state.isLoading ? 'Loading...' : 'Load Data'}
                     </Button>
                 </Form>
-                <ChartArea width={960} height={480} data={this.state.data} />
+                <ChartArea visible={this.state.data.length > 0} width={960} height={480} data={this.state.data} />
             </React.Fragment>
         )
     }
