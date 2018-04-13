@@ -90,6 +90,7 @@ class Chart extends React.Component {
         this.state = {
             dateFrom: '2017-10-01',
             dateTo: '2017-10-29',
+            isLoading: false,
             data: []
         };
         this.onLoad = this.onLoad.bind(this);
@@ -106,10 +107,11 @@ class Chart extends React.Component {
     }
 
     onLoad() {
+        this.setState({ isLoading: true });
         const dateFrom = this.state.dateFrom;
         const dateTo = this.state.dateTo;
         const url = `https://api.carbonintensity.org.uk/intensity/${dateFrom}/${dateTo}`;
-        d3.json(url).then(json => this.setState({ data: json.data }));
+        d3.json(url).then(json => this.setState({ data: json.data, isLoading: false }));
     }
 
     render() {
@@ -119,7 +121,9 @@ class Chart extends React.Component {
                 <div>
                     <DateInput value={this.state.dateFrom} onChange={this.onDateFromChange} />
                     <DateInput value={this.state.dateTo} onChange={this.onDateToChange} />
-                    <Button onClick={this.onLoad}>Load</Button>
+                    <Button disabled={this.state.isLoading} onClick={this.onLoad}>
+                        {this.state.isLoading ? 'Loading...' : 'Load Data'}
+                    </Button>
                 </div>
                 <ChartArea width={960} height={480} data={this.state.data} />
             </React.Fragment>
