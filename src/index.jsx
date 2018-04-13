@@ -74,17 +74,6 @@ class ChartArea extends React.Component {
     }
 }
 
-class DateInput extends React.Component {
-    render() {
-        return (
-            <input
-                type="date"
-                value={this.props.value}
-                onChange={this.props.onChange} />
-        )
-    }
-}
-
 class Chart extends React.Component {
     constructor(props) {
         super(props);
