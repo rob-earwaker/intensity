@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button } from 'react-bootstrap';
+import { Button, ControlLabel, Form, FormControl, FormGroup } from 'react-bootstrap';
 
 class ChartArea extends React.Component {
     render() {
@@ -118,13 +118,19 @@ class Chart extends React.Component {
         return (
             <React.Fragment>
                 <h1>Chart #1</h1>
-                <div>
-                    <DateInput value={this.state.dateFrom} onChange={this.onDateFromChange} />
-                    <DateInput value={this.state.dateTo} onChange={this.onDateToChange} />
+                <Form inline>
+                    <FormGroup>
+                        <ControlLabel>Start</ControlLabel>
+                        <FormControl type='date' value={this.state.dateFrom} onChange={this.onDateFromChange} />
+                    </FormGroup>
+                    <FormGroup>
+                        <ControlLabel>End</ControlLabel>
+                        <FormControl type='date' value={this.state.dateTo} onChange={this.onDateToChange} />
+                    </FormGroup>
                     <Button disabled={this.state.isLoading} onClick={this.onLoad}>
                         {this.state.isLoading ? 'Loading...' : 'Load Data'}
                     </Button>
-                </div>
+                </Form>
                 <ChartArea width={960} height={480} data={this.state.data} />
             </React.Fragment>
         )
