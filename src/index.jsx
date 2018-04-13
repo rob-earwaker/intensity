@@ -22,9 +22,13 @@ class ChartArea extends React.Component {
             .range([0, width])
             .domain(d3.extent(this.props.data, function (d) { return d3.isoParse(d.from); }));
 
+        const maxIntensity = d3.max(
+            this.props.data,
+            function (d) { return d3.max([d.intensity.actual, d.intensity.forecast]); })
+
         const yScale = d3.scaleLinear()
             .range([height, 0])
-            .domain([0, 1.05 * d3.max(this.props.data, function (d) { return d.intensity.actual; })]);
+            .domain([0, 1.05 * maxIntensity]);
 
         const xAxis = g.append('g')
             .call(d3.axisBottom(xScale))
@@ -33,13 +37,21 @@ class ChartArea extends React.Component {
         const yAxis = g.append('g')
             .call(d3.axisLeft(yScale))
 
-        const dataLine = g.append('path')
+        const actualIntensityLine = g.append('path')
             .datum(this.props.data)
             .attr('d', d3.line()
                 .x(function (d) { return xScale(d3.isoParse(d.from)); })
                 .y(function (d) { return yScale(d.intensity.actual); }))
             .attr('fill', 'none')
             .attr('stroke', 'black');
+
+        const forecastIntensityLine = g.append('path')
+            .datum(this.props.data)
+            .attr('d', d3.line()
+                .x(function (d) { return xScale(d3.isoParse(d.from)); })
+                .y(function (d) { return yScale(d.intensity.forecast); }))
+            .attr('fill', 'none')
+            .attr('stroke', 'red');
 
         const tooltipGroup = g.append('g')
             .attr('display', 'none');
@@ -79,7 +91,7 @@ class Chart extends React.Component {
         super(props);
         this.state = {
             dateFrom: '2017-10-01',
-            dateTo: '2017-10-29',
+            dateTo: '2017-10-07',
             isLoading: false,
             data: []
         };
