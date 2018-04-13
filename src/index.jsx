@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Button } from 'react-bootstrap';
 
 class ChartArea extends React.Component {
     render() {
@@ -72,16 +73,6 @@ class ChartArea extends React.Component {
     }
 }
 
-class Button extends React.Component {
-    render() {
-        return (
-            <button type='button' onClick={this.props.onClick}>
-                {this.props.content}
-            </button>
-        )
-    }
-}
-
 class DateInput extends React.Component {
     render() {
         return (
@@ -128,7 +119,7 @@ class Chart extends React.Component {
                 <div>
                     <DateInput value={this.state.dateFrom} onChange={this.onDateFromChange} />
                     <DateInput value={this.state.dateTo} onChange={this.onDateToChange} />
-                    <Button onClick={this.onLoad} content='Load' />
+                    <Button onClick={this.onLoad}>Load</Button>
                 </div>
                 <ChartArea width={960} height={480} data={this.state.data} />
             </React.Fragment>
