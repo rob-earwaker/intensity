@@ -51,7 +51,8 @@ class ChartArea extends React.Component {
                 .x(function (d) { return xScale(d3.isoParse(d.from)); })
                 .y(function (d) { return yScale(d.intensity.forecast); }))
             .attr('fill', 'none')
-            .attr('stroke', 'red');
+            .attr('stroke', 'red')
+            .attr('stroke-dasharray', '2, 2');
 
         const tooltipGroup = g.append('g')
             .attr('display', 'none');
