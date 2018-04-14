@@ -2,6 +2,16 @@ import * as d3 from 'd3';
 import React from 'react';
 
 class ChartArea extends React.Component {
+    indexColour(index) {
+        return {
+            'very low': 'blue',
+            low: 'green',
+            moderate: 'yellow',
+            high: 'orange',
+            'very high': 'red'
+        }[index];
+    }
+
     render() {
         const svg = d3.select('svg');
 
@@ -51,6 +61,15 @@ class ChartArea extends React.Component {
             .attr('fill', 'none')
             .attr('stroke', 'red')
             .attr('stroke-dasharray', '2, 2');
+
+        const indexMarkers = g.selectAll('circle')
+            .data(this.props.data, function (d) { return d.index; })
+            .enter()
+            .append('circle')
+            .attr('cx', function (d) { return xScale(d3.isoParse(d.from)); })
+            .attr('cy', function (d) { return yScale(d.intensity.actual); })
+            .attr('fill', d => this.indexColour(d.intensity.index))
+            .attr('r', 2);
 
         const tooltipGroup = g.append('g')
             .attr('display', 'none');
