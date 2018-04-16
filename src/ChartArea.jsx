@@ -99,8 +99,10 @@ class ChartArea extends React.Component {
                     .text(xValue);
             });
 
-        return <svg width={this.props.width} height={this.props.height}
-            visibility={this.props.visible ? null : 'hidden'} />
+        return <svg
+            viewBox={'0 0 ' + this.props.width + ' ' + this.props.height}
+            visibility={this.props.visible ? null : 'hidden'}
+        />
     }
 }
 
