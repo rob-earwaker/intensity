@@ -1,5 +1,29 @@
 import * as d3 from 'd3';
 import React from 'react';
+import styled from 'styled-components';
+
+class Line extends React.Component {
+    render() {
+        const line = d3.line()
+            .x(d => this.props.xScale(this.props.xAccessor(d)))
+            .y(d => this.props.yScale(this.props.yAccessor(d)));
+
+        const pathData = line(this.props.data)
+
+        return <path d={pathData} className={this.props.className} />
+    }
+}
+
+const ActualIntensityLine = styled(Line) `
+    fill: none;
+    stroke: black;
+`;
+
+const ForecastIntensityLine = styled(Line) `
+    fill: none;
+    stroke: red;
+    stroke-dasharray: 2, 2;
+`;
 
 class ChartArea extends React.Component {
     indexColour(index) {
@@ -14,8 +38,6 @@ class ChartArea extends React.Component {
 
     render() {
         const svg = d3.select('svg');
-
-        svg.selectAll('*').remove();
 
         const margin = { top: 10, right: 10, bottom: 30, left: 30 };
         const width = this.props.width - margin.left - margin.left;
@@ -44,23 +66,6 @@ class ChartArea extends React.Component {
 
         const yAxis = g.append('g')
             .call(d3.axisLeft(yScale))
-
-        const actualIntensityLine = g.append('path')
-            .datum(this.props.data)
-            .attr('d', d3.line()
-                .x(function (d) { return xScale(d3.isoParse(d.from)); })
-                .y(function (d) { return yScale(d.intensity.actual); }))
-            .attr('fill', 'none')
-            .attr('stroke', 'black');
-
-        const forecastIntensityLine = g.append('path')
-            .datum(this.props.data)
-            .attr('d', d3.line()
-                .x(function (d) { return xScale(d3.isoParse(d.from)); })
-                .y(function (d) { return yScale(d.intensity.forecast); }))
-            .attr('fill', 'none')
-            .attr('stroke', 'red')
-            .attr('stroke-dasharray', '2, 2');
 
         const indexMarkers = g.selectAll('circle')
             .data(this.props.data, function (d) { return d.index; })
@@ -99,10 +104,31 @@ class ChartArea extends React.Component {
                     .text(xValue);
             });
 
-        return <svg
-            viewBox={'0 0 ' + this.props.width + ' ' + this.props.height}
-            visibility={this.props.visible ? null : 'hidden'}
-        />
+        return (
+            <svg
+                viewBox={'0 0 ' + this.props.width + ' ' + this.props.height}
+                visibility={this.props.visible ? null : 'hidden'}>
+                <g
+                    width={width}
+                    height={height}
+                    transform={'translate(' + margin.left + ',' + margin.top + ')'}>
+                    <ActualIntensityLine
+                        data={this.props.data}
+                        xScale={xScale}
+                        xAccessor={d => d3.isoParse(d.from)}
+                        yScale={yScale}
+                        yAccessor={d => d.intensity.actual}
+                    />
+                    <ForecastIntensityLine
+                        data={this.props.data}
+                        xScale={xScale}
+                        xAccessor={d => d3.isoParse(d.from)}
+                        yScale={yScale}
+                        yAccessor={d => d.intensity.forecast}
+                    />
+                </g>
+            </svg>
+        )
     }
 }
 
