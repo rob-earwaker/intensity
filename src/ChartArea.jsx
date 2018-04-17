@@ -1,19 +1,7 @@
 import * as d3 from 'd3';
 import React from 'react';
-import styled from 'styled-components';
-
-import Line from '../src/Line';
-
-const ActualIntensityLine = styled(Line) `
-    fill: none;
-    stroke: black;
-`;
-
-const ForecastIntensityLine = styled(Line) `
-    fill: none;
-    stroke: red;
-    stroke-dasharray: 2, 2;
-`;
+import ActualIntensityLine from '../src/ActualIntensityLine';
+import ForecastIntensityLine from '../src/ForecastIntensityLine';
 
 class ChartArea extends React.Component {
     indexColour(index) {
