@@ -1,7 +1,7 @@
 import * as d3 from 'd3';
 import React from 'react';
-import ActualIntensityLine from '../src/ActualIntensityLine';
-import ForecastIntensityLine from '../src/ForecastIntensityLine';
+import ActualIntensityLine from 'components/ActualIntensityLine';
+import ForecastIntensityLine from 'components/ForecastIntensityLine';
 
 class IntensityLineChart extends React.Component {
     indexColour(index) {

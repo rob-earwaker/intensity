@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Line from '../src/Line';
+import Line from 'components/Line';
 
 const ActualIntensityLine = styled(Line) `
     fill: none;

@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, ControlLabel, Form, FormControl, FormGroup } from 'react-bootstrap';
-import IntensityLineChart from '../src/IntensityLineChart.jsx';
+import IntensityLineChart from 'components/IntensityLineChart';
 
 class Chart extends React.Component {
     constructor(props) {
