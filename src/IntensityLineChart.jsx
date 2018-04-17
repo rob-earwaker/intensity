@@ -3,7 +3,7 @@ import React from 'react';
 import ActualIntensityLine from '../src/ActualIntensityLine';
 import ForecastIntensityLine from '../src/ForecastIntensityLine';
 
-class ChartArea extends React.Component {
+class IntensityLineChart extends React.Component {
     indexColour(index) {
         return {
             'very low': 'blue',
@@ -110,4 +110,4 @@ class ChartArea extends React.Component {
     }
 }
 
-export default ChartArea;
+export default IntensityLineChart;

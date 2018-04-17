@@ -2,7 +2,7 @@ import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Button, ControlLabel, Form, FormControl, FormGroup } from 'react-bootstrap';
-import ChartArea from '../src/ChartArea.jsx';
+import IntensityLineChart from '../src/IntensityLineChart.jsx';
 
 class Chart extends React.Component {
     constructor(props) {
@@ -51,7 +51,7 @@ class Chart extends React.Component {
                         {this.state.isLoading ? 'Loading...' : 'Load Data'}
                     </Button>
                 </Form>
-                <ChartArea visible={this.state.data.length > 0} width={960} height={480} data={this.state.data} />
+                <IntensityLineChart visible={this.state.data.length > 0} width={960} height={480} data={this.state.data} />
             </React.Fragment>
         )
     }
