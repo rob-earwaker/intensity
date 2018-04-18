@@ -1,7 +1,17 @@
 import * as d3 from 'd3';
 import React from 'react';
-import ActualIntensityLine from 'components/Line.styled';
-import ForecastIntensityLine from 'components/ForecastIntensityLine';
+import Line from 'components/Line';
+
+const ActualIntensityLine = styled(Line) `
+    fill: none;
+    stroke: black;
+`;
+
+const ForecastIntensityLine = styled(Line) `
+    fill: none;
+    stroke: red;
+    stroke-dasharray: 2, 2;
+`;
 
 class IntensityLineChart extends React.Component {
     indexColour(index) {
