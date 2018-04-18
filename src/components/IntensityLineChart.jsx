@@ -1,5 +1,6 @@
 import * as d3 from 'd3';
 import React from 'react';
+import styled from 'styled-components';
 import Line from 'components/Line';
 
 const ActualIntensityLine = styled(Line) `
@@ -38,11 +39,11 @@ class IntensityLineChart extends React.Component {
 
         const xScale = d3.scaleTime()
             .range([0, width])
-            .domain(d3.extent(this.props.data, function (d) { return d3.isoParse(d.from); }));
+            .domain(d3.extent(this.props.data, d => d3.isoParse(d.from)));
 
         const maxIntensity = d3.max(
             this.props.data,
-            function (d) { return d3.max([d.intensity.actual, d.intensity.forecast]); })
+            d => d3.max([d.intensity.actual, d.intensity.forecast]))
 
         const yScale = d3.scaleLinear()
             .range([height, 0])
@@ -56,11 +57,11 @@ class IntensityLineChart extends React.Component {
             .call(d3.axisLeft(yScale))
 
         const indexMarkers = g.selectAll('circle')
-            .data(this.props.data, function (d) { return d.index; })
+            .data(this.props.data, d => d.index)
             .enter()
             .append('circle')
-            .attr('cx', function (d) { return xScale(d3.isoParse(d.from)); })
-            .attr('cy', function (d) { return yScale(d.intensity.actual); })
+            .attr('cx', d => xScale(d3.isoParse(d.from)))
+            .attr('cy', d => yScale(d.intensity.actual))
             .attr('fill', d => this.indexColour(d.intensity.index))
             .attr('r', 2);
 
@@ -79,8 +80,8 @@ class IntensityLineChart extends React.Component {
             .attr('height', height)
             .attr('fill', 'none')
             .attr('pointer-events', 'all')
-            .on('mouseover', function () { tooltipGroup.attr('display', null); })
-            .on('mouseout', function () { tooltipGroup.attr('display', 'none'); })
+            .on('mouseover', () => tooltipGroup.attr('display', null))
+            .on('mouseout', () => tooltipGroup.attr('display', 'none'))
             .on('mousemove', function () {
                 const xPixel = d3.mouse(this)[0];
                 const xValue = xScale.invert(xPixel);
