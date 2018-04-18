@@ -1,6 +1,6 @@
 import * as d3 from 'd3';
 import React from 'react';
-import ActualIntensityLine from 'components/ActualIntensityLine';
+import ActualIntensityLine from 'components/Line.styled';
 import ForecastIntensityLine from 'components/ForecastIntensityLine';
 
 class IntensityLineChart extends React.Component {
