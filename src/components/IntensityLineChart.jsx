@@ -1,6 +1,7 @@
 import * as d3 from 'd3';
 import React from 'react';
 import styled from 'styled-components';
+import CircleMarkers from 'components/CircleMarkers'
 import Line from 'components/Line';
 
 const ActualIntensityLine = styled(Line) `
@@ -56,15 +57,6 @@ class IntensityLineChart extends React.Component {
         const yAxis = g.append('g')
             .call(d3.axisLeft(yScale))
 
-        const indexMarkers = g.selectAll('circle')
-            .data(this.props.data, d => d.index)
-            .enter()
-            .append('circle')
-            .attr('cx', d => xScale(d3.isoParse(d.from)))
-            .attr('cy', d => yScale(d.intensity.actual))
-            .attr('fill', d => this.indexColour(d.intensity.index))
-            .attr('r', 2);
-
         const tooltipGroup = g.append('g')
             .attr('display', 'none');
 
@@ -114,6 +106,15 @@ class IntensityLineChart extends React.Component {
                         xAccessor={d => d3.isoParse(d.from)}
                         yScale={yScale}
                         yAccessor={d => d.intensity.forecast}
+                    />
+                    <CircleMarkers
+                        data={this.props.data}
+                        xScale={xScale}
+                        xAccessor={d => d3.isoParse(d.from)}
+                        yScale={yScale}
+                        yAccessor={d => d.intensity.actual}
+                        r={2}
+                        fillAccessor={d => this.indexColour(d.intensity.index)}
                     />
                 </g>
             </svg>
