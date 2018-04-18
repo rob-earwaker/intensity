@@ -1,16 +1,14 @@
 import * as d3 from 'd3';
 import React from 'react';
 
-class Line extends React.Component {
-    render() {
-        const line = d3.line()
-            .x(d => this.props.xScale(this.props.xAccessor(d)))
-            .y(d => this.props.yScale(this.props.yAccessor(d)));
+function Line(props) {
+    const line = d3.line()
+        .x(d => props.xScale(props.xAccessor(d)))
+        .y(d => props.yScale(props.yAccessor(d)));
 
-        const pathData = line(this.props.data)
+    const pathData = line(props.data)
 
-        return <path d={pathData} className={this.props.className} />
-    }
+    return <path d={pathData} className={props.className} />
 }
 
 export default Line;
