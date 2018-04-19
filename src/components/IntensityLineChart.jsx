@@ -3,6 +3,7 @@ import React from 'react';
 import styled from 'styled-components';
 import CircleMarkers from 'components/CircleMarkers'
 import Line from 'components/Line';
+import Tooltip from 'components/Tooltip';
 
 const ActualIntensityLine = styled(Line) `
     fill: none;
@@ -60,34 +61,6 @@ function IntensityLineChart(props) {
     const yAxis = g.append('g')
         .call(d3.axisLeft(yScale))
 
-    const tooltipGroup = g.append('g')
-        .attr('display', 'none');
-
-    const tooltipLine = tooltipGroup.append('line')
-        .attr('y1', 0)
-        .attr('y2', height)
-        .attr('stroke', 'black');
-
-    const tooltipText = tooltipGroup.append('text');
-
-    const chartArea = g.append('rect')
-        .attr('width', width)
-        .attr('height', height)
-        .attr('fill', 'none')
-        .attr('pointer-events', 'all')
-        .on('mouseover', () => tooltipGroup.attr('display', null))
-        .on('mouseout', () => tooltipGroup.attr('display', 'none'))
-        .on('mousemove', function () {
-            const xPixel = d3.mouse(this)[0];
-            const xValue = xScale.invert(xPixel);
-            tooltipLine.attr('transform', 'translate(' + xPixel + ',0)');
-            tooltipText
-                .attr('transform', 'translate(' + xPixel + ',' + height + ')')
-                .attr('dx', '0.50em')
-                .attr('dy', '-0.50em')
-                .text(xValue);
-        });
-
     return (
         <svg
             viewBox={'0 0 ' + props.width + ' ' + props.height}
@@ -119,6 +92,7 @@ function IntensityLineChart(props) {
                     r={2}
                     fillAccessor={d => mapIntensityIndexToColour(d.intensity.index)}
                 />
+                <Tooltip width={width} height={height} xScale={xScale} />
             </g>
         </svg>
     )
