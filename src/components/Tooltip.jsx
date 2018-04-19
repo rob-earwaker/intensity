@@ -22,32 +22,33 @@ class Tooltip extends React.Component {
     }
 
     onMouseMove(event) {
-        this.setState({ display: true, xPixel: d3.mouse(event.currentTarget)[0] })
+        this.setState({ display: true, xPixel: d3.clientPoint(event.currentTarget, event)[0] });
     }
 
     render() {
-        return <g display={this.state.display ? null : 'none'}>
+        return <React.Fragment>
             <rect
                 width={this.props.width}
                 height={this.props.height}
-                pointerEvents='all'
                 fill='none'
-                onMouseOver={this.onMouseOver}
+                onMouseOver={this.mouseOver}
                 onMouseOut={this.onMouseOut}
                 onMouseMove={this.onMouseMove}
             />
-            <line
-                y1={0}
-                y2={this.props.height}
-                stroke='black'
-                transform={'translate(' + this.state.xPixel + ',0)'} />
-            <text
-                transform={'translate(' + this.state.xPixel + ',' + this.props.height + ')'}
-                dx='0.50em'
-                dy='-0.50em' >
-                {d3.timeFormat("%Y-%m-%d")(this.props.xScale.invert(this.state.xPixel))}
-            </text>
-        </g>
+            <g display={this.state.display ? null : 'none'} >
+                <line
+                    y1={0}
+                    y2={this.props.height}
+                    stroke='black'
+                    transform={'translate(' + this.state.xPixel + ',0)'} />
+                <text
+                    transform={'translate(' + this.state.xPixel + ',' + this.props.height + ')'}
+                    dx='0.50em'
+                    dy='-0.50em' >
+                    {d3.timeFormat("%Y-%m-%d %H:%M:%S")(this.props.xScale.invert(this.state.xPixel))}
+                </text>
+            </g>
+        </React.Fragment>
     }
 }
 

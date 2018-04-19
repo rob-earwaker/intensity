@@ -62,7 +62,8 @@ function IntensityLineChart(props) {
                 id='g-main'
                 width={width}
                 height={height}
-                transform={'translate(' + margin.left + ',' + margin.top + ')'}>
+                transform={'translate(' + margin.left + ',' + margin.top + ')'}
+                pointerEvents='all'>
                 <g id='x-axis' />
                 <g id='y-axis' />
                 <ActualIntensityLine
