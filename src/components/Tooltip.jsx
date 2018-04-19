@@ -1,38 +1,54 @@
 import * as d3 from 'd3';
 import React from 'react';
 
-function Tooltip(props) {
-    const tooltipGroup = d3.select('#tooltip')
-        .attr('display', 'none');
+class Tooltip extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            display: false,
+            xPixel: 0
+        };
+        this.onMouseOver = this.onMouseOver.bind(this);
+        this.onMouseOut = this.onMouseOut.bind(this);
+        this.onMouseMove = this.onMouseMove.bind(this);
+    }
 
-    const tooltipLine = tooltipGroup.append('line')
-        .attr('y1', 0)
-        .attr('y2', props.height)
-        .attr('stroke', 'black');
+    onMouseOver() {
+        this.setState({ display: true });
+    }
 
-    const tooltipText = tooltipGroup.append('text');
+    onMouseOut() {
+        this.setState({ display: false, xPixel: 0 });
+    }
 
-    const chartArea = d3.select('#chart-area')
-        .attr('width', props.width)
-        .attr('height', props.height)
-        .attr('fill', 'none')
-        .attr('pointer-events', 'all')
-        .on('mouseover', () => tooltipGroup.attr('display', null))
-        .on('mouseout', () => tooltipGroup.attr('display', 'none'))
-        .on('mousemove', function () {
-            const xPixel = d3.mouse(this)[0];
-            const xValue = props.xScale.invert(xPixel);
-            tooltipLine.attr('transform', 'translate(' + xPixel + ',0)');
-            tooltipText
-                .attr('transform', 'translate(' + xPixel + ',' + height + ')')
-                .attr('dx', '0.50em')
-                .attr('dy', '-0.50em')
-                .text(xValue);
-        });
+    onMouseMove(event) {
+        this.setState({ display: true, xPixel: d3.mouse(event.currentTarget)[0] })
+    }
 
-    return <g id='tooltip'>
-        <rect id='chart-area'/>
-    </g>
+    render() {
+        return <g display={this.state.display ? null : 'none'}>
+            <rect
+                width={this.props.width}
+                height={this.props.height}
+                pointerEvents='all'
+                fill='none'
+                onMouseOver={this.onMouseOver}
+                onMouseOut={this.onMouseOut}
+                onMouseMove={this.onMouseMove}
+            />
+            <line
+                y1={0}
+                y2={this.props.height}
+                stroke='black'
+                transform={'translate(' + this.state.xPixel + ',0)'} />
+            <text
+                transform={'translate(' + this.state.xPixel + ',' + this.props.height + ')'}
+                dx='0.50em'
+                dy='-0.50em' >
+                {d3.timeFormat("%Y-%m-%d")(this.props.xScale.invert(this.state.xPixel))}
+            </text>
+        </g>
+    }
 }
 
 export default Tooltip;
