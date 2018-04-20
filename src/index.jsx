@@ -1,7 +1,6 @@
 import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
-import { Button, ControlLabel, Form, FormControl, FormGroup } from 'react-bootstrap';
 import IntensityLineChart from 'components/IntensityLineChart';
 
 class Chart extends React.Component {
@@ -38,21 +37,15 @@ class Chart extends React.Component {
         return (
             <React.Fragment>
                 <h1>Chart #1</h1>
-                <Form inline>
-                    <FormGroup>
-                        <ControlLabel>Start</ControlLabel>
-                        <FormControl type='date' value={this.state.dateFrom} onChange={this.onDateFromChange} />
-                    </FormGroup>
-                    <FormGroup>
-                        <ControlLabel>End</ControlLabel>
-                        <FormControl type='date' value={this.state.dateTo} onChange={this.onDateToChange} />
-                    </FormGroup>
-                    <Button disabled={this.state.isLoading} onClick={this.onLoad}>
-                        {this.state.isLoading ? 'Loading...' : 'Load Data'}
-                    </Button>
-                </Form>
+                <label>Start</label>
+                <input type='date' value={this.state.dateFrom} onChange={this.onDateFromChange} />
+                <label>End</label>
+                <input type='date' value={this.state.dateTo} onChange={this.onDateToChange} />
+                <button disabled={this.state.isLoading} onClick={this.onLoad}>
+                    {this.state.isLoading ? 'Loading...' : 'Load Data'}
+                </button>
                 <IntensityLineChart visible={this.state.data.length > 0} width={960} height={480} data={this.state.data} />
-            </React.Fragment>
+            </React.Fragment >
         )
     }
 }
