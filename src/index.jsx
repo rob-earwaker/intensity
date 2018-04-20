@@ -2,6 +2,7 @@ import * as d3 from 'd3';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import IntensityLineChart from 'components/IntensityLineChart';
+import DateTimeInput from 'components/DateTimeInput';
 
 class Chart extends React.Component {
     constructor(props) {
@@ -38,9 +39,9 @@ class Chart extends React.Component {
             <React.Fragment>
                 <h1>Chart #1</h1>
                 <label>Start</label>
-                <input type='date' value={this.state.dateFrom} onChange={this.onDateFromChange} />
+                <DateTimeInput value={this.state.dateFrom} onChange={this.onDateFromChange}>
                 <label>End</label>
-                <input type='date' value={this.state.dateTo} onChange={this.onDateToChange} />
+                <DateTimeInput value={this.state.dateTo} onChange={this.onDateToChange}>
                 <button disabled={this.state.isLoading} onClick={this.onLoad}>
                     {this.state.isLoading ? 'Loading...' : 'Load Data'}
                 </button>
