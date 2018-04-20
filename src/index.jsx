@@ -8,8 +8,8 @@ class Chart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dateFrom: '2017-10-10',
-            dateTo: '2017-10-11',
+            dateFrom: '2017-10-10T00:00',
+            dateTo: '2017-10-11T00:00',
             isLoading: false,
             data: []
         };
@@ -39,14 +39,14 @@ class Chart extends React.Component {
             <React.Fragment>
                 <h1>Chart #1</h1>
                 <label>Start</label>
-                <DateTimeInput value={this.state.dateFrom} onChange={this.onDateFromChange}>
+                <DateTimeInput value={this.state.dateFrom} onChange={this.onDateFromChange} />
                 <label>End</label>
-                <DateTimeInput value={this.state.dateTo} onChange={this.onDateToChange}>
+                <DateTimeInput value={this.state.dateTo} onChange={this.onDateToChange} />
                 <button disabled={this.state.isLoading} onClick={this.onLoad}>
                     {this.state.isLoading ? 'Loading...' : 'Load Data'}
                 </button>
                 <IntensityLineChart visible={this.state.data.length > 0} width={960} height={480} data={this.state.data} />
-            </React.Fragment >
+            </React.Fragment>
         )
     }
 }
