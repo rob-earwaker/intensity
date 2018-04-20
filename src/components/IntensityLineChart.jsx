@@ -26,8 +26,12 @@ function mapIntensityIndexToColour(index) {
     }[index];
 }
 
+function translate(x, y) {
+    return 'translate(' + x + ',' + y + ')';
+}
+
 function IntensityLineChart(props) {
-    const margin = { top: 10, right: 10, bottom: 30, left: 30 };
+    const margin = { top: 30, right: 30, bottom: 30, left: 30 };
     const width = props.width - margin.left - margin.left;
     const height = props.height - margin.top - margin.bottom;
 
@@ -49,21 +53,14 @@ function IntensityLineChart(props) {
 
     const xAxis = d3.select('#x-axis')
         .call(d3.axisBottom(xScale))
-        .attr('transform', 'translate(0,' + height + ')')
+        .attr('transform', translate(0, height))
 
     const yAxis = d3.select('#y-axis')
         .call(d3.axisLeft(yScale))
 
     return (
-        <svg
-            viewBox={'0 0 ' + props.width + ' ' + props.height}
-            visibility={props.visible ? null : 'hidden'}>
-            <g
-                id='g-main'
-                width={width}
-                height={height}
-                transform={'translate(' + margin.left + ',' + margin.top + ')'}
-                pointerEvents='all'>
+        <svg viewBox={'0 0 ' + props.width + ' ' + props.height} visibility={props.visible ? null : 'hidden'}>
+            <g transform={translate(margin.left, margin.top)} pointerEvents='all'>
                 <g id='x-axis' />
                 <g id='y-axis' />
                 <ActualIntensityLine
