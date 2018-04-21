@@ -129,6 +129,7 @@ class IntensityLineChart extends React.Component {
                         data={this.props.data}
                         xScale={xScale}
                         xAccessor={timeAccessor}
+                        yAccessor={actualIntensityAccessor}
                         mouseXPixel={this.state.mouseXPixel} />
                 </g>
             </svg>

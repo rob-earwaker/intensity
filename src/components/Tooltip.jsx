@@ -34,14 +34,16 @@ function Tooltip(props) {
 
     const closestDataPoint = findClosestDataPoint(props);
     const tooltipXValue = props.xAccessor(closestDataPoint);
+    const tooltipYValue = props.yAccessor(closestDataPoint);
     const tooltipXPixel = props.xScale(tooltipXValue);
 
     const formatTime = d3.timeFormat("%Y-%m-%d %H:%M:%S");
 
-    return <g display={props.display ? null : 'none'} >
-        <TooltipLine y1={0} y2={props.height} transform={translate(tooltipXPixel, 0)} />
-        <text transform={translate(tooltipXPixel, props.height)} dx='0.50em' dy='-0.50em' >
-            {formatTime(tooltipXValue)}
+    return <g display={props.display ? null : 'none'} transform={translate(tooltipXPixel, 0)} >
+        <TooltipLine y1={0} y2={props.height} />
+        <text>
+            <tspan x='0.20em' dy='1.20em'>{formatTime(tooltipXValue)}</tspan>
+            <tspan x='0.20em' dy='1.20em'>{tooltipYValue}</tspan>
         </text>
     </g>
 }
