@@ -34,8 +34,8 @@ class IntensityLineChart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            displayTooltip: false,
-            tooltipXPixel: 0
+            mouseInChart: false,
+            mouseXPixel: 0
         };
         this.onMouseEnter = this.onMouseEnter.bind(this);
         this.onMouseLeave = this.onMouseLeave.bind(this);
@@ -43,17 +43,17 @@ class IntensityLineChart extends React.Component {
     }
 
     onMouseEnter() {
-        this.setState({ displayTooltip: true });
+        this.setState({ mouseInChart: true });
     }
 
     onMouseLeave() {
-        this.setState({ displayTooltip: false, tooltipXPixel: 0 });
+        this.setState({ mouseInChart: false, mouseXPixel: 0 });
     }
 
     onMouseMove(event) {
         this.setState({
-            displayTooltip: true,
-            tooltipXPixel: d3.clientPoint(event.currentTarget, event)[0]
+            mouseInChart: true,
+            mouseXPixel: d3.clientPoint(event.currentTarget, event)[0]
         });
     }
 
@@ -124,11 +124,12 @@ class IntensityLineChart extends React.Component {
                         fillAccessor={d => mapIntensityIndexToColour(d.intensity.index)}
                     />
                     <Tooltip
-                        display={this.state.displayTooltip}
-                        width={width}
+                        display={this.props.visible && this.state.mouseInChart}
                         height={height}
+                        data={this.props.data}
                         xScale={xScale}
-                        xPixel={this.state.tooltipXPixel} />
+                        xAccessor={timeAccessor}
+                        mouseXPixel={this.state.mouseXPixel} />
                 </g>
             </svg>
         )
