@@ -8,8 +8,8 @@ class Chart extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            dateFrom: '2017-10-10T00:00',
-            dateTo: '2017-10-11T00:00',
+            dateFrom: '2017-09-11T23:00',
+            dateTo: '2017-10-10T23:00',
             isLoading: false,
             data: []
         };

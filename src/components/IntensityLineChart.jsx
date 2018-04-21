@@ -30,66 +30,109 @@ function translate(x, y) {
     return 'translate(' + x + ',' + y + ')';
 }
 
-function IntensityLineChart(props) {
-    const margin = { top: 30, right: 30, bottom: 30, left: 30 };
-    const width = props.width - margin.left - margin.left;
-    const height = props.height - margin.top - margin.bottom;
+class IntensityLineChart extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            displayTooltip: false,
+            tooltipXPixel: 0
+        };
+        this.onMouseEnter = this.onMouseEnter.bind(this);
+        this.onMouseLeave = this.onMouseLeave.bind(this);
+        this.onMouseMove = this.onMouseMove.bind(this);
+    }
 
-    const timeAccessor = d => d3.isoParse(d.from);
-    const actualIntensityAccessor = d => d.intensity.actual;
-    const forecastIntensityAccessor = d => d.intensity.forecast;
+    onMouseEnter() {
+        this.setState({ displayTooltip: true });
+    }
 
-    const xScale = d3.scaleTime()
-        .range([0, width])
-        .domain(d3.extent(props.data, timeAccessor));
+    onMouseLeave() {
+        this.setState({ displayTooltip: false, tooltipXPixel: 0 });
+    }
 
-    const maxIntensity = d3.max(
-        props.data,
-        d => d3.max([actualIntensityAccessor(d), forecastIntensityAccessor(d)]))
+    onMouseMove(event) {
+        this.setState({
+            displayTooltip: true,
+            tooltipXPixel: d3.clientPoint(event.currentTarget, event)[0]
+        });
+    }
 
-    const yScale = d3.scaleLinear()
-        .range([height, 0])
-        .domain([0, 1.05 * maxIntensity]);
+    render() {
+        const margin = { top: 30, right: 30, bottom: 30, left: 30 };
+        const width = this.props.width - margin.left - margin.left;
+        const height = this.props.height - margin.top - margin.bottom;
 
-    const xAxis = d3.select('#x-axis')
-        .call(d3.axisBottom(xScale))
-        .attr('transform', translate(0, height))
+        const timeAccessor = d => d3.isoParse(d.from);
+        const actualIntensityAccessor = d => d.intensity.actual;
+        const forecastIntensityAccessor = d => d.intensity.forecast;
 
-    const yAxis = d3.select('#y-axis')
-        .call(d3.axisLeft(yScale))
+        const xScale = d3.scaleTime()
+            .range([0, width])
+            .domain(d3.extent(this.props.data, timeAccessor));
 
-    return (
-        <svg viewBox={'0 0 ' + props.width + ' ' + props.height} visibility={props.visible ? null : 'hidden'}>
-            <g transform={translate(margin.left, margin.top)} pointerEvents='all'>
-                <g id='x-axis' />
-                <g id='y-axis' />
-                <ActualIntensityLine
-                    data={props.data}
-                    xScale={xScale}
-                    xAccessor={timeAccessor}
-                    yScale={yScale}
-                    yAccessor={actualIntensityAccessor}
+        const maxIntensity = d3.max(
+            this.props.data,
+            d => d3.max([actualIntensityAccessor(d), forecastIntensityAccessor(d)]))
+
+        const yScale = d3.scaleLinear()
+            .range([height, 0])
+            .domain([0, 1.05 * maxIntensity]);
+
+        const xAxis = d3.select('#x-axis')
+            .call(d3.axisBottom(xScale))
+            .attr('transform', translate(0, height))
+
+        const yAxis = d3.select('#y-axis')
+            .call(d3.axisLeft(yScale))
+
+        return (
+            <svg viewBox={'0 0 ' + this.props.width + ' ' + this.props.height} visibility={this.props.visible ? null : 'hidden'}>
+                <rect
+                    width={width}
+                    height={height}
+                    transform={translate(margin.left, margin.top)}
+                    onMouseEnter={this.onMouseEnter}
+                    onMouseLeave={this.onMouseLeave}
+                    onMouseMove={this.onMouseMove}
+                    pointerEvents='all'
+                    fill='none'
                 />
-                <ForecastIntensityLine
-                    data={props.data}
-                    xScale={xScale}
-                    xAccessor={timeAccessor}
-                    yScale={yScale}
-                    yAccessor={forecastIntensityAccessor}
-                />
-                <CircleMarkers
-                    data={props.data}
-                    xScale={xScale}
-                    xAccessor={timeAccessor}
-                    yScale={yScale}
-                    yAccessor={actualIntensityAccessor}
-                    r={2}
-                    fillAccessor={d => mapIntensityIndexToColour(d.intensity.index)}
-                />
-                <Tooltip width={width} height={height} xScale={xScale} />
-            </g>
-        </svg>
-    )
+                <g transform={translate(margin.left, margin.top)} pointerEvents='none'>
+                    <g id='x-axis' />
+                    <g id='y-axis' />
+                    <ActualIntensityLine
+                        data={this.props.data}
+                        xScale={xScale}
+                        xAccessor={timeAccessor}
+                        yScale={yScale}
+                        yAccessor={actualIntensityAccessor}
+                    />
+                    <ForecastIntensityLine
+                        data={this.props.data}
+                        xScale={xScale}
+                        xAccessor={timeAccessor}
+                        yScale={yScale}
+                        yAccessor={forecastIntensityAccessor}
+                    />
+                    <CircleMarkers
+                        data={this.props.data}
+                        xScale={xScale}
+                        xAccessor={timeAccessor}
+                        yScale={yScale}
+                        yAccessor={actualIntensityAccessor}
+                        r={2}
+                        fillAccessor={d => mapIntensityIndexToColour(d.intensity.index)}
+                    />
+                    <Tooltip
+                        display={this.state.displayTooltip}
+                        width={width}
+                        height={height}
+                        xScale={xScale}
+                        xPixel={this.state.tooltipXPixel} />
+                </g>
+            </svg>
+        )
+    }
 }
 
 export default IntensityLineChart;
