@@ -16,15 +16,27 @@ const ForecastIntensityLine = styled(Line) `
     stroke-dasharray: 2, 2;
 `;
 
-function mapIntensityIndexToColour(index) {
-    return {
-        'very low': 'blue',
-        low: 'green',
-        moderate: 'yellow',
-        high: 'orange',
-        'very high': 'red'
-    }[index];
-}
+const VERY_LOW = { name: 'very low', rank: 0, colour: 'blue' };
+const LOW = { name: 'low', rank: 1, colour: 'green' };
+const MODERATE = { name: 'moderate', rank: 2, colour: 'yellow' };
+const HIGH = { name: 'high', rank: 3, colour: 'orange' };
+const VERY_HIGH = { name: 'very high', rank: 4, colour: 'red' };
+
+const intensityIndexNameMap = {
+    [VERY_LOW.name]: VERY_LOW,
+    [LOW.name]: LOW,
+    [MODERATE.name]: MODERATE,
+    [HIGH.name]: HIGH,
+    [VERY_HIGH.name]: VERY_HIGH
+};
+
+const intensityIndexRankMap = [
+    VERY_LOW,
+    LOW,
+    MODERATE,
+    HIGH,
+    VERY_HIGH
+];
 
 function translate(x, y) {
     return 'translate(' + x + ',' + y + ')';
@@ -63,16 +75,35 @@ class IntensityLineChart extends React.Component {
         const height = this.props.height - margin.top - margin.bottom;
 
         const timeAccessor = d => d3.isoParse(d.from);
-        const actualIntensityAccessor = d => d.intensity.actual;
-        const forecastIntensityAccessor = d => d.intensity.forecast;
 
         const xScale = d3.scaleTime()
             .range([0, width])
             .domain(d3.extent(this.props.data, timeAccessor));
 
-        const maxIntensity = d3.max(
-            this.props.data,
-            d => d3.max([actualIntensityAccessor(d), forecastIntensityAccessor(d)]))
+        function xPixel(d) {
+            return Math.round(xScale(timeAccessor(d)));
+        }
+
+        const data = d3.nest()
+            .key(xPixel)
+            .rollup(g => {
+                const indexRanks = g.map(d => intensityIndexNameMap[d.intensity.index].rank);
+                const medianRankIndex = Math.floor(indexRanks.length / 2);
+                const medianRank = indexRanks[medianRankIndex];
+                return {
+                    from: d3.isoFormat(d3.min(g, d => d3.isoParse(d.from))),
+                    to: d3.isoFormat(d3.max(g, d => d3.isoParse(d.to))),
+                    intensity: {
+                        actual: d3.max(g, d => d.intensity.actual),
+                        forecast: d3.max(g, d => d.intensity.forecast),
+                        index: intensityIndexRankMap[medianRank]
+                    }
+                }
+            })
+            .entries(this.props.data)
+            .map(d => d.value);
+
+        const maxIntensity = d3.max(data, d => d3.max([d.intensity.actual, d.intensity.forecast]))
 
         const yScale = d3.scaleLinear()
             .range([height, 0])
@@ -101,35 +132,35 @@ class IntensityLineChart extends React.Component {
                     <g id='x-axis' />
                     <g id='y-axis' />
                     <ActualIntensityLine
-                        data={this.props.data}
+                        data={data}
                         xScale={xScale}
                         xAccessor={timeAccessor}
                         yScale={yScale}
-                        yAccessor={actualIntensityAccessor}
+                        yAccessor={d => d.intensity.actual}
                     />
                     <ForecastIntensityLine
-                        data={this.props.data}
+                        data={data}
                         xScale={xScale}
                         xAccessor={timeAccessor}
                         yScale={yScale}
-                        yAccessor={forecastIntensityAccessor}
+                        yAccessor={d => d.intensity.forecast}
                     />
                     <CircleMarkers
-                        data={this.props.data}
+                        data={data}
                         xScale={xScale}
                         xAccessor={timeAccessor}
                         yScale={yScale}
-                        yAccessor={actualIntensityAccessor}
+                        yAccessor={d => d.intensity.actual}
                         r={2}
-                        fillAccessor={d => mapIntensityIndexToColour(d.intensity.index)}
+                        fillAccessor={d => d.intensity.index.colour}
                     />
                     <Tooltip
                         display={this.props.visible && this.state.mouseInChart}
                         height={height}
-                        data={this.props.data}
+                        data={data}
                         xScale={xScale}
                         xAccessor={timeAccessor}
-                        yAccessor={actualIntensityAccessor}
+                        yAccessor={d => d.intensity.actual}
                         mouseXPixel={this.state.mouseXPixel} />
                 </g>
             </svg>
