@@ -80,12 +80,8 @@ class IntensityLineChart extends React.Component {
             .range([0, width])
             .domain(d3.extent(this.props.data, timeAccessor));
 
-        function xPixel(d) {
-            return Math.round(xScale(timeAccessor(d)));
-        }
-
         const data = d3.nest()
-            .key(xPixel)
+            .key(d => Math.round(xScale(timeAccessor(d)) / 10))
             .rollup(g => {
                 const indexRanks = g.map(d => intensityIndexNameMap[d.intensity.index].rank);
                 const medianRankIndex = Math.floor(indexRanks.length / 2);
