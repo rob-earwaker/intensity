@@ -74,21 +74,19 @@ class IntensityLineChart extends React.Component {
         const width = this.props.width - margin.left - margin.left;
         const height = this.props.height - margin.top - margin.bottom;
 
-        const timeAccessor = d => d3.isoParse(d.from);
-
         const xScale = d3.scaleTime()
             .range([0, width])
-            .domain(d3.extent(this.props.data, timeAccessor));
+            .domain(d3.extent(this.props.data, d => d3.isoParse(d.from)));
 
         const data = d3.nest()
-            .key(d => Math.round(xScale(timeAccessor(d)) / 10))
+            .key(d => Math.round(xScale(d3.isoParse(d.from)) / 10))
             .rollup(g => {
                 const indexRanks = g.map(d => intensityIndexNameMap[d.intensity.index].rank);
                 const medianRankIndex = Math.floor(indexRanks.length / 2);
                 const medianRank = indexRanks[medianRankIndex];
                 return {
-                    from: d3.isoFormat(d3.min(g, d => d3.isoParse(d.from))),
-                    to: d3.isoFormat(d3.max(g, d => d3.isoParse(d.to))),
+                    from: d3.min(g, d => d3.isoParse(d.from)),
+                    to: d3.max(g, d => d3.isoParse(d.to)),
                     intensity: {
                         actual: d3.max(g, d => d.intensity.actual),
                         forecast: d3.max(g, d => d.intensity.forecast),
@@ -130,21 +128,21 @@ class IntensityLineChart extends React.Component {
                     <ActualIntensityLine
                         data={data}
                         xScale={xScale}
-                        xAccessor={timeAccessor}
+                        xAccessor={d => d.from}
                         yScale={yScale}
                         yAccessor={d => d.intensity.actual}
                     />
                     <ForecastIntensityLine
                         data={data}
                         xScale={xScale}
-                        xAccessor={timeAccessor}
+                        xAccessor={d => d.from}
                         yScale={yScale}
                         yAccessor={d => d.intensity.forecast}
                     />
                     <CircleMarkers
                         data={data}
                         xScale={xScale}
-                        xAccessor={timeAccessor}
+                        xAccessor={d => d.from}
                         yScale={yScale}
                         yAccessor={d => d.intensity.actual}
                         r={2}
@@ -155,7 +153,7 @@ class IntensityLineChart extends React.Component {
                         height={height}
                         data={data}
                         xScale={xScale}
-                        xAccessor={timeAccessor}
+                        xAccessor={d => d.from}
                         yAccessor={d => d.intensity.actual}
                         mouseXPixel={this.state.mouseXPixel} />
                 </g>
